@@ -1,0 +1,18 @@
+services:
+  flask_app:
+    build: .
+    ports:
+      - "5000:5000"
+    networks:
+      - monitoring
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - 9090:9090
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    driver: bridge
