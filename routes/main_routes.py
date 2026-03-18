@@ -1,4 +1,4 @@
-from flask import Blueprint, Response
+from flask import Blueprint, Response, render_template
 from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 from config.metrics import REQUESTS_TOTAL
 
@@ -12,3 +12,8 @@ def healthy():
 def metrics():
     # Udostępnienie metryk dla Prometheusa
     return Response(generate_latest(), content_type=CONTENT_TYPE_LATEST)
+
+main_bp.get('/', methods=['GET'])
+def index():
+    REQUESTS_TOTAL.inc()
+    return render_template('index.html')

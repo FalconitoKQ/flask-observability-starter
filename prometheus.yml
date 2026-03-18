@@ -4,4 +4,5 @@ global:
 scrape_configs:
   - job_name: 'flask-app'
     static_configs:
-      - targets: ['http://localhost:5000/']
+      - targets: ['http://flask_app:5000/']
+      - metrics_path: '/metrics'
