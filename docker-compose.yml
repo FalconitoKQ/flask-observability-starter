@@ -1,8 +1,8 @@
 services:
   flask_app:
     build: .
-    ports:
-      - "5000:5000"
+    expose:
+      - "5000"
     networks:
       - monitoring
   
@@ -21,6 +21,12 @@ services:
     image: prom/prometheus:latest
     ports:
       - 9090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    depends_on:
+      - flask_app
     networks:
       - monitoring
 
@@ -30,8 +36,11 @@ services:
       - 3000:3000
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
     networks:
       - monitoring
     
